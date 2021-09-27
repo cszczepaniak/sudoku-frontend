@@ -5,10 +5,9 @@ export class InfrastructureStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new SPADeploy(this, id).createSiteFromHostedZone({
+    new SPADeploy(this, id).createSiteWithCloudfront({
       indexDoc: "index.html",
       websiteFolder: "artifact",
-      zoneName: "oh-heck.com",
     });
   }
 }

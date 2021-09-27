@@ -1,5 +1,16 @@
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import {
+    Dispatch,
+    SetStateAction,
+    useCallback,
+    useMemo,
+    useState,
+} from "react";
+import {
+    createKeyboardShortcutHandler,
+    createNumberKeyHandler,
+    useKeyHandler,
+} from "./key-handlers";
 
 export type SetSquareFunc = (i: number, j: number, n: number) => void;
 export type ClearSquareFunc = (i: number, j: number) => void;
@@ -9,13 +20,59 @@ export interface Square {
     value: number;
 }
 
-interface UseBoardResult {
-    board: Square[][];
-    setSquare: SetSquareFunc;
-    clearSquare: ClearSquareFunc;
+export function useBoard(selection: [number, number]) {
+    const [boardState, setBoardState] = useState(initializeBoard());
+
+    const setSquare = useCallback((i: number, j: number, n: number) => {
+        if (n < 1 || n > 9) {
+            return;
+        }
+        setSquareInternal(i, j, n, setBoardState);
+    }, []);
+
+    const clearSquare = useCallback((i: number, j: number) => {
+        setSquareInternal(i, j, 0, setBoardState);
+    }, []);
+
+    const numberKeyHandler = useMemo(
+        () => createNumberKeyHandler(selection, setSquare, clearSquare),
+        [clearSquare, selection, setSquare],
+    );
+    useKeyHandler(numberKeyHandler);
+
+    const keyboardShortcutHandler = useMemo(
+        () =>
+            createKeyboardShortcutHandler(selection, clearSquare, () =>
+                setBoardState(initializeBoard()),
+            ),
+        [clearSquare, selection],
+    );
+    useKeyHandler(keyboardShortcutHandler);
+
+    return {
+        board: boardState,
+        setSquare,
+        clearSquare,
+    };
 }
 
-export function useBoard(): UseBoardResult {
+function setSquareInternal(
+    i: number,
+    j: number,
+    n: number,
+    setBoardState: Dispatch<SetStateAction<Square[][]>>,
+) {
+    if (i < 0 || i > 8 || j < 0 || j > 8) {
+        return;
+    }
+    setBoardState(prev => {
+        const prevCopy = prev.map(r => [...r]);
+        prevCopy[i][j].value = n;
+        return prevCopy;
+    });
+}
+
+function initializeBoard() {
     const emptyBoard: Square[][] = [];
     for (let i = 0; i < 9; i++) {
         emptyBoard.push([]);
@@ -23,29 +80,5 @@ export function useBoard(): UseBoardResult {
             emptyBoard[i].push({ id: nanoid(), value: 0 });
         }
     }
-    const [boardState, setBoardState] = useState(emptyBoard);
-    const setSquareInternal = (i: number, j: number, n: number) => {
-        if (i < 0 || i > 8 || j < 0 || j > 8) {
-            return;
-        }
-        setBoardState(prev => {
-            const prevCopy = prev.map(r => [...r]);
-            prevCopy[i][j].value = n;
-            return prevCopy;
-        });
-    };
-    const setSquare = (i: number, j: number, n: number) => {
-        if (n < 1 || n > 9) {
-            return;
-        }
-        setSquareInternal(i, j, n);
-    };
-    const clearSquare = (i: number, j: number) => {
-        setSquareInternal(i, j, 0);
-    };
-    return {
-        board: boardState,
-        setSquare,
-        clearSquare,
-    };
+    return emptyBoard;
 }

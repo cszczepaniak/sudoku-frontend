@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { Dispatch } from "react";
 import { contiguousTo2D } from "../utils";
-import { ClearSquareFunc, SetSquareFunc, Square } from "./use-board";
+import { Square } from "./use-board";
 
 interface BoxProps {
     minRow: number;
@@ -9,8 +9,6 @@ interface BoxProps {
     currentSelection: [number, number];
     setCurrentSelection: Dispatch<React.SetStateAction<[number, number]>>;
     board: Square[][];
-    setSquare: SetSquareFunc;
-    clearSquare: ClearSquareFunc;
 }
 
 export const Box: React.FunctionComponent<BoxProps> = ({
@@ -19,8 +17,6 @@ export const Box: React.FunctionComponent<BoxProps> = ({
     currentSelection,
     setCurrentSelection,
     board,
-    setSquare,
-    clearSquare,
 }) => {
     const thisBox: Square[] = [];
     for (let i = minRow; i < minRow + 3; i++) {

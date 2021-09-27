@@ -5,11 +5,8 @@ import { useBoard } from "./use-board";
 import { useSelection } from "./use-selection";
 
 export const Board: React.FunctionComponent = () => {
-    const { board, setSquare, clearSquare } = useBoard();
-    const [currentSelection, setCurrentSelection] = useSelection(
-        setSquare,
-        clearSquare
-    );
+    const [currentSelection, setCurrentSelection] = useSelection();
+    const { board } = useBoard(currentSelection);
     return (
         <div className="bg-gray-50 flex flex-row flex-wrap square">
             {Array(9)
@@ -26,8 +23,6 @@ export const Board: React.FunctionComponent = () => {
                             minCol={minCol}
                             currentSelection={currentSelection}
                             setCurrentSelection={setCurrentSelection}
-                            setSquare={setSquare}
-                            clearSquare={clearSquare}
                         />
                     );
                 })}

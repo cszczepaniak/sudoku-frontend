@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .square{
+        height: 50vw;
+        width: 50vw;
+    }
+}
+

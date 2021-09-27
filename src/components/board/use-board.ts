@@ -34,6 +34,24 @@ export function useBoard(selection: [number, number]) {
         setSquareInternal(i, j, 0, setBoardState);
     }, []);
 
+    const setBoard = useCallback((data: number[][]) => {
+        setBoardState(prev => {
+            if (data.length !== 9) {
+                return prev;
+            }
+            const prevCopy = prev.map(r => [...r]);
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].length !== 9) {
+                    return prev;
+                }
+                for (let j = 0; j < data[i].length; j++) {
+                    prevCopy[i][j].value = data[i][j];
+                }
+            }
+            return prevCopy;
+        });
+    }, []);
+
     const numberKeyHandler = useMemo(
         () => createNumberKeyHandler(selection, setSquare, clearSquare),
         [clearSquare, selection, setSquare],
@@ -51,8 +69,7 @@ export function useBoard(selection: [number, number]) {
 
     return {
         board: boardState,
-        setSquare,
-        clearSquare,
+        setBoard,
     };
 }
 

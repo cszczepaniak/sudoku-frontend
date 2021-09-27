@@ -1,12 +1,19 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { contiguousTo2D } from "../utils";
 import { Box } from "./Box";
-import { useBoard } from "./use-board";
-import { useSelection } from "./use-selection";
+import { Square } from "./use-board";
 
-export const Board: React.FunctionComponent = () => {
-    const [currentSelection, setCurrentSelection] = useSelection();
-    const { board } = useBoard(currentSelection);
+interface BoardProps {
+    board: Square[][];
+    currentSelection: [number, number];
+    setCurrentSelection: Dispatch<SetStateAction<[number, number]>>;
+}
+
+export const Board: React.FunctionComponent<BoardProps> = ({
+    board,
+    currentSelection,
+    setCurrentSelection,
+}) => {
     return (
         <div className="bg-gray-50 flex flex-row flex-wrap square">
             {Array(9)

@@ -8,15 +8,20 @@ interface BoxProps {
     minCol: number;
     currentSelection: [number, number];
     setCurrentSelection: Dispatch<React.SetStateAction<[number, number]>>;
+    createInputChangeHandler: (
+        i: number,
+        j: number,
+    ) => React.ChangeEventHandler;
     board: Square[][];
 }
 
 export const Box: React.FunctionComponent<BoxProps> = ({
-    minRow,
-    minCol,
-    currentSelection,
+    createInputChangeHandler,
     setCurrentSelection,
     board,
+    currentSelection,
+    minCol,
+    minRow,
 }) => {
     const thisBox: Square[] = [];
     for (let i = minRow; i < minRow + 3; i++) {
@@ -33,6 +38,8 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                     currentSelection[0] === thisRow &&
                     currentSelection[1] === thisCol;
 
+                const handler = createInputChangeHandler(thisRow, thisCol);
+
                 return (
                     <input
                         key={sq.id}
@@ -43,6 +50,7 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                             !isSelected && "hover:bg-blue-100",
                         )}
                         onFocus={() => setCurrentSelection([thisRow, thisCol])} // onFocus makes tab OR click work
+                        onChange={handler}
                         type="tel" // force numeric keybaord on mobile
                         value={sq.value === 0 ? "" : sq.value}
                     />

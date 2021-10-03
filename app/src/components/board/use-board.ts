@@ -56,12 +56,6 @@ export function useBoard(selection: [number, number]) {
         setBoard(Array(9).fill(Array(9).fill(0)));
     }, [setBoard]);
 
-    const numberKeyHandler = useMemo(
-        () => createNumberKeyHandler(selection, setSquare, clearSquare),
-        [clearSquare, selection, setSquare],
-    );
-    useKeyHandler(numberKeyHandler);
-
     const keyboardShortcutHandler = useMemo(
         () =>
             createKeyboardShortcutHandler(selection, clearSquare, () =>
@@ -74,7 +68,9 @@ export function useBoard(selection: [number, number]) {
     return {
         board: boardState,
         setBoard,
+        setSquare,
         clearBoard,
+        clearSquare,
     };
 }
 

@@ -1,5 +1,5 @@
 import * as KeyCode from "keycode-js";
-import { Dispatch, useEffect } from "react";
+import { useEffect } from "react";
 import { ClearSquareFunc } from "./use-board";
 
 export function useKeyHandler(handler: (ev: KeyboardEvent) => void) {
@@ -11,28 +11,34 @@ export function useKeyHandler(handler: (ev: KeyboardEvent) => void) {
     }, [handler]);
 }
 
-export function createArrowKeyHandler(
-    setSelection: Dispatch<React.SetStateAction<[number, number]>>,
-) {
+interface ArrowKeyHandlers {
+    left: () => void;
+    right: () => void;
+    up: () => void;
+    down: () => void;
+}
+
+export function createArrowKeyHandler({
+    left,
+    right,
+    up,
+    down,
+}: ArrowKeyHandlers) {
     return (ev: KeyboardEvent) => {
-        setSelection(prev => {
-            let prevCopy: [number, number] = [...prev];
-            switch (ev.code) {
-                case KeyCode.CODE_LEFT:
-                    prevCopy[1] = prevCopy[1] > 0 ? prevCopy[1] - 1 : 0;
-                    break;
-                case KeyCode.CODE_RIGHT:
-                    prevCopy[1] = prevCopy[1] < 8 ? prevCopy[1] + 1 : 8;
-                    break;
-                case KeyCode.CODE_UP:
-                    prevCopy[0] = prevCopy[0] > 0 ? prevCopy[0] - 1 : 0;
-                    break;
-                case KeyCode.CODE_DOWN:
-                    prevCopy[0] = prevCopy[0] < 8 ? prevCopy[0] + 1 : 8;
-                    break;
-            }
-            return prevCopy;
-        });
+        switch (ev.code) {
+            case KeyCode.CODE_LEFT:
+                left();
+                break;
+            case KeyCode.CODE_RIGHT:
+                right();
+                break;
+            case KeyCode.CODE_UP:
+                up();
+                break;
+            case KeyCode.CODE_DOWN:
+                down();
+                break;
+        }
     };
 }
 

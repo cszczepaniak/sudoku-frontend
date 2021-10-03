@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useTimedState } from "../../common/hooks/use-timed-state";
 import { Board } from "./Board";
 import { BoardControls } from "./BoardControls";
 import { useBoard } from "./use-board";
@@ -11,13 +12,7 @@ const solveURL =
 export const BoardContainer: React.FunctionComponent = () => {
     const [currentSelection, setCurrentSelection] = useSelection();
     const { board, setBoard } = useBoard(currentSelection);
-    const [error, setError] = useState("");
-    useEffect(() => {
-        if (error !== "") {
-            const timer = setTimeout(() => setError(""), 5000);
-            return () => clearTimeout(timer);
-        }
-    }, [error]);
+    const [error, setError] = useTimedState("", 5000);
 
     const solve = async () => {
         const data = board.map(r => [...r.map(n => n.value)]);

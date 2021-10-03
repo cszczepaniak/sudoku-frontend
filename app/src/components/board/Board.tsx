@@ -23,7 +23,7 @@ export const Board: React.FunctionComponent<BoardProps> = ({
             {Array(9)
                 .fill(0)
                 .map((_, i) => {
-                    const [r, c] = contiguousTo2D(i);
+                    const [r, c] = contiguousTo2D(i, 3);
                     const minRow = r * 3;
                     const minCol = c * 3;
                     return (

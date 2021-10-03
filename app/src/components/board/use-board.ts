@@ -6,11 +6,7 @@ import {
     useMemo,
     useState,
 } from "react";
-import {
-    createKeyboardShortcutHandler,
-    createNumberKeyHandler,
-    useKeyHandler,
-} from "./key-handlers";
+import { createKeyboardShortcutHandler, useKeyHandler } from "./key-handlers";
 
 export type SetSquareFunc = (i: number, j: number, n: number) => void;
 export type ClearSquareFunc = (i: number, j: number) => void;
@@ -52,11 +48,9 @@ export function useBoard(selection: [number, number]) {
         });
     }, []);
 
-    const numberKeyHandler = useMemo(
-        () => createNumberKeyHandler(selection, setSquare, clearSquare),
-        [clearSquare, selection, setSquare],
-    );
-    useKeyHandler(numberKeyHandler);
+    const clearBoard = useCallback(() => {
+        setBoard(Array(9).fill(Array(9).fill(0)));
+    }, [setBoard]);
 
     const keyboardShortcutHandler = useMemo(
         () =>
@@ -70,6 +64,9 @@ export function useBoard(selection: [number, number]) {
     return {
         board: boardState,
         setBoard,
+        setSquare,
+        clearBoard,
+        clearSquare,
     };
 }
 

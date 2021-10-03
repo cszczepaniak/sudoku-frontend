@@ -34,19 +34,18 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                     currentSelection[1] === thisCol;
 
                 return (
-                    <div
+                    <input
                         key={sq.id}
                         className={clsx(
-                            "w-1/3 h-1/3 border border-gray-400 flex flex-row items-center justify-around",
+                            "w-1/3 h-1/3 border border-gray-400 text-center flex flex-row items-center justify-around cursor-default caret-transparent focus:outline-none",
                             isSelected && "bg-blue-300",
                             !isSelected && "hover:bg-blue-100",
                         )}
-                        onClick={() => {
-                            setCurrentSelection([thisRow, thisCol]);
-                        }}
-                    >
-                        {sq.value === 0 ? "" : sq.value}
-                    </div>
+                        onClick={() => setCurrentSelection([thisRow, thisCol])} // make clicking work
+                        onFocus={() => setCurrentSelection([thisRow, thisCol])} // make tab work
+                        type="tel" // force numeric keybaord on mobile
+                        value={sq.value === 0 ? "" : sq.value}
+                    />
                 );
             })}
         </div>

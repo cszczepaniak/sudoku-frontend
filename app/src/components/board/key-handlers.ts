@@ -11,11 +11,17 @@ export function useKeyHandler(handler: (ev: KeyboardEvent) => void) {
     }, [handler]);
 }
 
+export interface KeyModifier {
+    ctrl: boolean;
+    shift: boolean;
+    alt: boolean;
+}
+
 interface ArrowKeyHandlers {
-    left: () => void;
-    right: () => void;
-    up: () => void;
-    down: () => void;
+    left: (m: KeyModifier) => void;
+    right: (m: KeyModifier) => void;
+    up: (m: KeyModifier) => void;
+    down: (m: KeyModifier) => void;
 }
 
 export function createArrowKeyHandler({
@@ -25,19 +31,18 @@ export function createArrowKeyHandler({
     down,
 }: ArrowKeyHandlers) {
     return (ev: KeyboardEvent) => {
-        switch (ev.code) {
-            case KeyCode.CODE_LEFT:
-                left();
-                break;
-            case KeyCode.CODE_RIGHT:
-                right();
-                break;
-            case KeyCode.CODE_UP:
-                up();
-                break;
-            case KeyCode.CODE_DOWN:
-                down();
-                break;
+        const cmdMap: { [key: string]: (m: KeyModifier) => void } = {
+            [KeyCode.CODE_LEFT]: left,
+            [KeyCode.CODE_RIGHT]: right,
+            [KeyCode.CODE_UP]: up,
+            [KeyCode.CODE_DOWN]: down,
+        };
+        if (cmdMap[ev.code]) {
+            cmdMap[ev.code]({
+                ctrl: ev.ctrlKey,
+                shift: ev.shiftKey,
+                alt: ev.altKey,
+            });
         }
     };
 }
@@ -50,6 +55,7 @@ export function createKeyboardShortcutHandler(
     return (ev: KeyboardEvent) => {
         switch (ev.code) {
             case KeyCode.CODE_X:
+            case KeyCode.CODE_DELETE:
                 clearSquare(selection[0], selection[1]);
                 break;
             case KeyCode.CODE_ESCAPE:

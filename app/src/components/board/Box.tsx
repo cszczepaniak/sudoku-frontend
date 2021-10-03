@@ -41,8 +41,7 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                             isSelected && "bg-blue-300",
                             !isSelected && "hover:bg-blue-100",
                         )}
-                        onClick={() => setCurrentSelection([thisRow, thisCol])} // make clicking work
-                        onFocus={() => setCurrentSelection([thisRow, thisCol])} // make tab work
+                        onFocus={() => setCurrentSelection([thisRow, thisCol])} // onFocus makes tab OR click work
                         type="tel" // force numeric keybaord on mobile
                         value={sq.value === 0 ? "" : sq.value}
                     />

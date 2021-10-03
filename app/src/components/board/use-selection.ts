@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { createArrowKeyHandler } from "./key-handlers";
+import React, { useCallback, useState } from "react";
+import { createArrowKeyHandler, useKeyHandler } from "./key-handlers";
 
 type UseStateReturn<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 
@@ -23,13 +23,8 @@ export function useSelection(): UseStateReturn<[number, number]> {
         [setSelection],
     );
 
-    useEffect(() => {
-        const handler = createArrowKeyHandler({ left, right, up, down });
-        window.addEventListener("keydown", handler);
-        return () => {
-            window.removeEventListener("keydown", handler);
-        };
-    }, [down, left, right, up]);
+    const arrowKeyHandler = createArrowKeyHandler({ left, right, up, down });
+    useKeyHandler(arrowKeyHandler);
 
     return [selection, setSelection];
 }

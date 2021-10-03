@@ -6,11 +6,7 @@ import {
     useMemo,
     useState,
 } from "react";
-import {
-    createKeyboardShortcutHandler,
-    createNumberKeyHandler,
-    useKeyHandler,
-} from "./key-handlers";
+import { createKeyboardShortcutHandler, useKeyHandler } from "./key-handlers";
 
 export type SetSquareFunc = (i: number, j: number, n: number) => void;
 export type ClearSquareFunc = (i: number, j: number) => void;

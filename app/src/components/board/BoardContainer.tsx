@@ -11,7 +11,7 @@ const solveURL =
 
 export const BoardContainer: React.FunctionComponent = () => {
     const [currentSelection, setCurrentSelection] = useSelection();
-    const { board, setBoard } = useBoard(currentSelection);
+    const { board, setBoard, clearBoard } = useBoard(currentSelection);
     const [error, setError] = useTimedState("", 5000);
 
     const solve = async () => {
@@ -34,7 +34,11 @@ export const BoardContainer: React.FunctionComponent = () => {
 
     return (
         <div className="p-16">
-            <BoardControls solve={solve} solveError={error} />
+            <BoardControls
+                clearBoard={clearBoard}
+                solve={solve}
+                solveError={error}
+            />
             <Board
                 board={board}
                 currentSelection={currentSelection}

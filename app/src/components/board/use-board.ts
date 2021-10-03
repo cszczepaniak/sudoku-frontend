@@ -52,6 +52,10 @@ export function useBoard(selection: [number, number]) {
         });
     }, []);
 
+    const clearBoard = useCallback(() => {
+        setBoard(Array(9).fill(Array(9).fill(0)));
+    }, [setBoard]);
+
     const numberKeyHandler = useMemo(
         () => createNumberKeyHandler(selection, setSquare, clearSquare),
         [clearSquare, selection, setSquare],
@@ -70,6 +74,7 @@ export function useBoard(selection: [number, number]) {
     return {
         board: boardState,
         setBoard,
+        clearBoard,
     };
 }
 

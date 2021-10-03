@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { createArrowKeyHandler } from "./key-handlers";
 
-const useInitialSelection = () => useState<[number, number]>([0, 0]);
-
-export function useSelection(): ReturnType<typeof useInitialSelection> {
-    const [selection, setSelection] = useInitialSelection();
+export function useSelection() {
+    const state = useState<[number, number]>([0, 0]);
 
     useEffect(() => {
-        const handler = createArrowKeyHandler(setSelection);
+        const handler = createArrowKeyHandler(state[1]);
         window.addEventListener("keydown", handler);
         return () => {
             window.removeEventListener("keydown", handler);
         };
-    }, [setSelection]);
+    }, [state]);
 
-    return [selection, setSelection];
+    return state;
 }

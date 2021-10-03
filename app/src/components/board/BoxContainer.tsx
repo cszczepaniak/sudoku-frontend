@@ -2,6 +2,11 @@ import React, { Dispatch } from "react";
 import { Box } from "./Box";
 import { Square } from "./use-board";
 
+export interface BoxSquare {
+    sq: Square;
+    absPos: [number, number];
+}
+
 interface BoxProps {
     board: Square[][];
     currentSelection: [number, number];
@@ -15,6 +20,9 @@ interface BoxProps {
 export const BoxContainer: React.FunctionComponent<BoxProps> = ({
     setSquare,
     clearSquare,
+    minRow,
+    minCol,
+    board,
     ...rest
 }) => {
     const createInputChangeHandler =
@@ -34,7 +42,18 @@ export const BoxContainer: React.FunctionComponent<BoxProps> = ({
             }
         };
 
+    const thisBox: BoxSquare[] = [];
+    for (let i = minRow; i < minRow + 3; i++) {
+        for (let j = minCol; j < minCol + 3; j++) {
+            thisBox.push({ sq: board[i][j], absPos: [i, j] });
+        }
+    }
+
     return (
-        <Box createInputChangeHandler={createInputChangeHandler} {...rest} />
+        <Box
+            createInputChangeHandler={createInputChangeHandler}
+            squares={thisBox}
+            {...rest}
+        />
     );
 };

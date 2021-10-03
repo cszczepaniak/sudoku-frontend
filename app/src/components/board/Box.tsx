@@ -36,6 +36,7 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                 return (
                     <input
                         key={sq.id}
+                        aria-label={`cell_${thisRow}_${thisCol}`}
                         className={clsx(
                             "w-1/3 h-1/3 border border-gray-400 text-center flex flex-row items-center justify-around cursor-default caret-transparent focus:outline-none",
                             isSelected && "bg-blue-300",

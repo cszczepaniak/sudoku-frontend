@@ -6,6 +6,7 @@ import { Square } from "./use-board";
 interface BoardProps {
     board: Square[][];
     currentSelection: [number, number];
+    size: number;
     setCurrentSelection: Dispatch<SetStateAction<[number, number]>>;
     setSquare: (i: number, j: number, n: number) => void;
     clearSquare: (i: number, j: number) => void;
@@ -14,12 +15,16 @@ interface BoardProps {
 export const Board: React.FunctionComponent<BoardProps> = ({
     board,
     currentSelection,
+    size,
     setCurrentSelection,
     setSquare,
     clearSquare,
 }) => {
     return (
-        <div className="bg-gray-50 flex flex-row flex-wrap square">
+        <div
+            className="bg-gray-50 flex flex-row flex-wrap"
+            style={{ height: size, width: size }}
+        >
             {Array(9)
                 .fill(0)
                 .map((_, i) => {

@@ -3,7 +3,7 @@ import React from "react";
 import { useTimedState } from "../../common/hooks/use-timed-state";
 import { Board } from "./Board";
 import { BoardControls } from "./BoardControls";
-import { useBoard } from "./use-board";
+import { useBoard, useBoardSize } from "./use-board";
 import { useSelection } from "./use-selection";
 
 const solveURL =
@@ -14,6 +14,7 @@ export const BoardContainer: React.FunctionComponent = () => {
     const { board, setBoard, setSquare, clearSquare, clearBoard } =
         useBoard(currentSelection);
     const [error, setError] = useTimedState("", 5000);
+    const boardSize = useBoardSize();
 
     const solve = async () => {
         const data = board.map(r => [...r.map(n => n.value)]);
@@ -41,6 +42,7 @@ export const BoardContainer: React.FunctionComponent = () => {
                 solveError={error}
             />
             <Board
+                size={boardSize}
                 board={board}
                 currentSelection={currentSelection}
                 setCurrentSelection={setCurrentSelection}

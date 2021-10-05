@@ -3,6 +3,7 @@ import {
     Dispatch,
     SetStateAction,
     useCallback,
+    useEffect,
     useMemo,
     useState,
 } from "react";
@@ -14,6 +15,22 @@ export type ClearSquareFunc = (i: number, j: number) => void;
 export interface Square {
     id: string;
     value: number;
+}
+
+export function useBoardSize() {
+    const calcSize = () =>
+        Math.min(0.9 * window.innerHeight, 0.9 * window.innerWidth);
+    const [boardSize, setBoardSize] = useState(calcSize());
+    useEffect(() => {
+        const handleResize = () => {
+            setBoardSize(calcSize());
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+    return boardSize;
 }
 
 export function useBoard(selection: [number, number]) {

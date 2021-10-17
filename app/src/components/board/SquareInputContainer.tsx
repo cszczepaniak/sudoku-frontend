@@ -5,6 +5,7 @@ import { Square } from "./use-board";
 interface SquareInputContainerProps {
     pos: [number, number];
     currentSelection: [number, number];
+    isValid: boolean;
     sq: Square;
     createInputChangeHandler: (
         i: number,
@@ -18,6 +19,7 @@ export const SquareInputContainer: React.FunctionComponent<SquareInputContainerP
         pos: [thisRow, thisCol],
         currentSelection: [selectedRow, selectedCol],
         sq,
+        isValid,
         createInputChangeHandler,
         setCurrentSelection,
     }) => {
@@ -36,6 +38,7 @@ export const SquareInputContainer: React.FunctionComponent<SquareInputContainerP
                 handleFocus={() => setCurrentSelection([thisRow, thisCol])}
                 handleInputChange={createInputChangeHandler(thisRow, thisCol)}
                 isSelected={isSelected}
+                isValid={isValid}
                 pos={[thisRow, thisCol]}
                 sq={sq}
             />

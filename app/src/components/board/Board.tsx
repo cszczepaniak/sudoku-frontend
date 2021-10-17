@@ -7,6 +7,7 @@ interface BoardProps {
     board: Square[][];
     currentSelection: [number, number];
     size: number;
+    invalidIndices: Set<number>;
     setCurrentSelection: Dispatch<SetStateAction<[number, number]>>;
     setSquare: (i: number, j: number, n: number) => void;
     clearSquare: (i: number, j: number) => void;
@@ -19,6 +20,7 @@ export const Board: React.FunctionComponent<BoardProps> = ({
     setCurrentSelection,
     setSquare,
     clearSquare,
+    invalidIndices,
 }) => {
     return (
         <div
@@ -37,6 +39,7 @@ export const Board: React.FunctionComponent<BoardProps> = ({
                             board={board}
                             minRow={minRow}
                             minCol={minCol}
+                            invalidIndices={invalidIndices}
                             currentSelection={currentSelection}
                             setCurrentSelection={setCurrentSelection}
                             setSquare={setSquare}

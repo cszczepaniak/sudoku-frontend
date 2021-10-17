@@ -24,6 +24,7 @@ export const Box: React.FunctionComponent<BoxProps> = ({
                 <SquareInputContainer
                     key={bsq.sq.id}
                     currentSelection={currentSelection}
+                    isValid={bsq.isValid}
                     sq={bsq.sq}
                     pos={bsq.absPos}
                     createInputChangeHandler={createInputChangeHandler}

@@ -5,6 +5,7 @@ import { Square } from "./use-board";
 export interface BoxSquare {
     sq: Square;
     absPos: [number, number];
+    isValid: boolean;
 }
 
 interface BoxProps {
@@ -12,6 +13,7 @@ interface BoxProps {
     currentSelection: [number, number];
     minRow: number;
     minCol: number;
+    invalidIndices: Set<number>;
     setCurrentSelection: Dispatch<React.SetStateAction<[number, number]>>;
     setSquare: (i: number, j: number, n: number) => void;
     clearSquare: (i: number, j: number) => void;
@@ -23,6 +25,7 @@ export const BoxContainer: React.FunctionComponent<BoxProps> = ({
     minRow,
     minCol,
     board,
+    invalidIndices,
     ...rest
 }) => {
     const createInputChangeHandler =
@@ -45,7 +48,11 @@ export const BoxContainer: React.FunctionComponent<BoxProps> = ({
     const thisBox: BoxSquare[] = [];
     for (let i = minRow; i < minRow + 3; i++) {
         for (let j = minCol; j < minCol + 3; j++) {
-            thisBox.push({ sq: board[i][j], absPos: [i, j] });
+            thisBox.push({
+                sq: board[i][j],
+                absPos: [i, j],
+                isValid: !invalidIndices.has(9 * i + j),
+            });
         }
     }
 

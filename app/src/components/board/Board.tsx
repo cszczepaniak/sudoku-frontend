@@ -1,27 +1,14 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { contiguousTo2D } from "../utils";
 import { BoxContainer } from "./BoxContainer";
-import { Square } from "./use-board";
+import { useBoard } from "./board-context";
 
 interface BoardProps {
-    board: Square[][];
-    currentSelection: [number, number];
     size: number;
-    invalidIndices: Set<number>;
-    setCurrentSelection: Dispatch<SetStateAction<[number, number]>>;
-    setSquare: (i: number, j: number, n: number) => void;
-    clearSquare: (i: number, j: number) => void;
 }
 
-export const Board: React.FunctionComponent<BoardProps> = ({
-    board,
-    currentSelection,
-    size,
-    setCurrentSelection,
-    setSquare,
-    clearSquare,
-    invalidIndices,
-}) => {
+export const Board: React.FunctionComponent<BoardProps> = ({ size }) => {
+    const { board } = useBoard();
     return (
         <div
             className="bg-gray-50 flex flex-row flex-wrap"
@@ -36,14 +23,8 @@ export const Board: React.FunctionComponent<BoardProps> = ({
                     return (
                         <BoxContainer
                             key={board[minRow][minCol].id}
-                            board={board}
                             minRow={minRow}
                             minCol={minCol}
-                            invalidIndices={invalidIndices}
-                            currentSelection={currentSelection}
-                            setCurrentSelection={setCurrentSelection}
-                            setSquare={setSquare}
-                            clearSquare={clearSquare}
                         />
                     );
                 })}

@@ -1,6 +1,5 @@
 import * as KeyCode from "keycode-js";
 import { useEffect } from "react";
-import { ClearSquareFunc } from "./use-board";
 
 export function useKeyHandler(handler: (ev: KeyboardEvent) => void) {
     useEffect(() => {
@@ -49,7 +48,7 @@ export function createArrowKeyHandler({
 
 export function createKeyboardShortcutHandler(
     selection: [number, number],
-    clearSquare: ClearSquareFunc,
+    clearSquare: (i: number, j: number) => void,
     clearBoard: () => void,
 ) {
     return (ev: KeyboardEvent) => {

@@ -34,6 +34,7 @@ export const BoardContainer: React.FunctionComponent = () => {
     const handleClear = () => {
         clearBoard();
         clearInvalidSquares();
+        setError("");
     };
 
     const solve = async () => {
@@ -45,6 +46,7 @@ export const BoardContainer: React.FunctionComponent = () => {
                 data,
             );
             setBoard(response.data);
+            setError("");
         } catch (err) {
             let maybeAxiosErr = err as Error | AxiosError;
             if (!axios.isAxiosError(maybeAxiosErr)) {

@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import {
     createArrowKeyHandler,
     KeyModifier,
     useKeyHandler,
 } from "./key-handlers";
 
-type UseStateReturn<T> = [T, React.Dispatch<React.SetStateAction<T>>];
+type UseStateReturn<T> = [T, Dispatch<SetStateAction<T>>];
 
 export function useSelection(): UseStateReturn<[number, number]> {
     const [selection, setSelection] = useState<[number, number]>([0, 0]);

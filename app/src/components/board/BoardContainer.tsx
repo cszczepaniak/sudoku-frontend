@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { useTimedState } from "../../common/hooks/use-timed-state";
 import { Board } from "./Board";
 import { BoardControls } from "./BoardControls";
-import { useBoard, useBoardSize } from "./use-board";
-import { useSelection } from "./use-selection";
+import { useBoard } from "./board-context";
+import { useBoardSize } from "./use-board-size";
 
 const solveURL =
     "https://ez5jsbsj7c.execute-api.us-east-2.amazonaws.com/dev/api/solve";
@@ -21,27 +21,24 @@ interface errorResponse {
 }
 
 export const BoardContainer: React.FunctionComponent = () => {
-    const [currentSelection, setCurrentSelection] = useSelection();
-    const { board, setBoard, setSquare, clearSquare, clearBoard } =
-        useBoard(currentSelection);
+    const {
+        board,
+        setBoard,
+        clearBoard,
+        markSquaresInvalid,
+        clearInvalidSquares,
+    } = useBoard();
     const [error, setError] = useTimedState("", 5000);
-    const [invalidSquares, setInvalidSquares] = useState<invalidSquare[]>([]);
     const boardSize = useBoardSize();
-
-    const invalidIndices: Set<number> = useMemo(() => {
-        const s = new Set<number>();
-        invalidSquares.forEach(sq => s.add(9 * sq.row + sq.col));
-        return s;
-    }, [invalidSquares]);
 
     const handleClear = () => {
         clearBoard();
-        setInvalidSquares([]);
+        clearInvalidSquares();
     };
 
     const solve = async () => {
         const data = board.map(r => [...r.map(n => n.value)]);
-        setInvalidSquares([]);
+        clearInvalidSquares();
         try {
             const response: AxiosResponse<number[][]> = await axios.post(
                 solveURL,
@@ -60,7 +57,9 @@ export const BoardContainer: React.FunctionComponent = () => {
             }
             setError(errResp.error);
             if (errResp.invalidSquares) {
-                setInvalidSquares(errResp.invalidSquares);
+                markSquaresInvalid(
+                    errResp.invalidSquares.map(sq => [sq.row, sq.col]),
+                );
             }
         }
     };
@@ -72,15 +71,7 @@ export const BoardContainer: React.FunctionComponent = () => {
                 solve={solve}
                 solveError={error}
             />
-            <Board
-                size={boardSize}
-                board={board}
-                currentSelection={currentSelection}
-                setCurrentSelection={setCurrentSelection}
-                setSquare={setSquare}
-                clearSquare={clearSquare}
-                invalidIndices={invalidIndices}
-            />
+            <Board size={boardSize} />
         </div>
     );
 };
